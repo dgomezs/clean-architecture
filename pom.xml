@@ -36,7 +36,7 @@
     <spring-boot-maven-plugin.version>2.2.4.RELEASE</spring-boot-maven-plugin.version>
     <junit-dataprovider.version>1.13.1</junit-dataprovider.version>
     <test-utils.version>1.0.3</test-utils.version>
-    <cucumber.version>4.8.0</cucumber.version>
+    <cucumber.version>6.4.0</cucumber.version>
     <spring-cloud.version>Hoxton.SR4</spring-cloud.version>
     <spring-boot.version>2.3.0.RELEASE</spring-boot.version>
   </properties>
@@ -66,6 +66,12 @@
       <dependency>
         <groupId>io.cucumber</groupId>
         <artifactId>cucumber-spring</artifactId>
+        <version>${cucumber.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.cucumber</groupId>
+        <artifactId>cucumber-java</artifactId>
         <version>${cucumber.version}</version>
         <scope>test</scope>
       </dependency>
