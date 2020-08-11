@@ -1,0 +1,36 @@
+# Created by .ignore support plugin (hsz.mobi)
+/.idea/
+*.iml
+**/target/**
+.flattened-pom.xml
+
+## Eclipse Specifice Files
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+
+.flattened-pom.xml
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+# STS (Spring Tool Suite)
+.springBeans
+# Code Recommenders
+.recommenders/
+
+# Annotation Processing
+.apt_generated/
+.apt_generated_test/
+.classpath
+.project
