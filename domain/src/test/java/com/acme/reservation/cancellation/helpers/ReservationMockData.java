@@ -1,4 +1,4 @@
-package com.acme.reservation.cancellation;
+package com.acme.reservation.cancellation.helpers;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;

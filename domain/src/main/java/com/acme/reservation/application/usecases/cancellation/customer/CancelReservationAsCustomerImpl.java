@@ -45,7 +45,7 @@ public class CancelReservationAsCustomerImpl implements CancelReservationAsCusto
 
               return executeInTransaction(saveThenRefund)
                   .thenReturn(refundBreakdown)
-                  .doOnNext(r -> this.notifyReservationCancelled(reservationId));
+                  .doOnNext(r -> this.notifyReservationCancelled(reservation));
             })
         .switchIfEmpty(throwReservationNotFound(reservationId));
   }
@@ -63,8 +63,8 @@ public class CancelReservationAsCustomerImpl implements CancelReservationAsCusto
     return transactionalOperator.transactional(toBeExecutedInTransaction);
   }
 
-  private void notifyReservationCancelled(ReservationId reservationId) {
-    eventBus.publish(new ReservationCancelled(reservationId));
+  private void notifyReservationCancelled(Reservation reservation) {
+    eventBus.publish(new ReservationCancelled(reservation));
   }
 
   private RefundBreakdown calculateRefundBreakdown(Reservation reservation) {

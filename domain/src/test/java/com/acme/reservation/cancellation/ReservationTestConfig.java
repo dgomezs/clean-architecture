@@ -4,6 +4,8 @@ import com.acme.reservation.application.event.ReservationEventPublisher;
 import com.acme.reservation.application.repository.ReservationRepository;
 import com.acme.reservation.application.usecases.cancellation.customer.CancelReservationAsCustomerImpl;
 import com.acme.reservation.application.usecases.cancellation.customer.CancelReservationAsCustomerUseCase;
+import com.acme.reservation.cancellation.helpers.ReservationMockData;
+import com.acme.reservation.cancellation.helpers.ReservationVerificationRules;
 import com.acme.reservation.entity.cancellation.policy.CancellationPolicyFactory;
 import com.acme.reservation.entity.cancellation.policy.CancellationPolicyFactoryImpl;
 import com.acme.reservation.gateway.FinanceGateway;

@@ -1,12 +1,12 @@
 package com.acme.reservation.application.event;
 
-import com.acme.reservation.entity.ReservationId;
+import com.acme.reservation.entity.Reservation;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@AllArgsConstructor
 public abstract class ReservationEvent {
 
-  protected final ReservationId reservationId;
-
-  public ReservationEvent(ReservationId reservationId) {
-    this.reservationId = reservationId;
-  }
+  @Getter
+  protected final Reservation reservation;
 }

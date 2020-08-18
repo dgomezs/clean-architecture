@@ -2,8 +2,10 @@ package com.acme.reservation.cancellation;
 
 import com.acme.reservation.application.response.RefundBreakdown;
 import com.acme.reservation.application.usecases.cancellation.customer.CancelReservationAsCustomerUseCase;
+import com.acme.reservation.cancellation.helpers.MockTransaction;
+import com.acme.reservation.cancellation.helpers.ReservationMockData;
+import com.acme.reservation.cancellation.helpers.ReservationVerificationRules;
 import com.acme.reservation.entity.Reservation;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +17,7 @@ import reactor.test.StepVerifier;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ReservationTestConfig.class)
-public class CancellationRollbackCasesTest {
+public class CancellationSuccessfulCasesTest {
 
   @Autowired private ReservationMockData reservationMockData;
   @Autowired private ReservationVerificationRules reservationVerificationRules;
@@ -27,44 +29,28 @@ public class CancellationRollbackCasesTest {
   }
 
   @Test
-  public void ensureTransactionIsRollbackIfFinanceGatewayFailsButPersistenceSuccedeeds() {
-    MockTransaction mockTransaction = new MockTransaction();
-    Reservation reservation = reservationMockData.getRandomReservation();
-    reservationMockData.configureTransaction(mockTransaction);
-    reservationMockData.simulateFinanceGatewayFails(reservation);
-    reservationMockData.updateStatusSucceeds(reservation);
-
-    Mono<RefundBreakdown> refundBreakdownMono =
-        cancelReservationAsCustomerUseCase.cancelAsCustomer(reservation.getReservationId());
-
-    StepVerifier.create(refundBreakdownMono)
-        .expectErrorSatisfies(
-            e -> {
-              Assert.assertEquals(e.getClass(), IllegalAccessError.class);
-              reservationVerificationRules.verifyTransactionWasRolledBack(mockTransaction);
-              reservationVerificationRules.verifyStatusUpdateWasCalled(reservation);
-            })
-        .verify();
-  }
-
-  @Test
-  public void ensureTransactionIsRollbackIfFinanceGatewaySucceedsButPersistenceFails() {
+  public void ensureReservationIsCancelled() {
     MockTransaction mockTransaction = new MockTransaction();
     Reservation reservation = reservationMockData.getRandomReservation();
     reservationMockData.configureTransaction(mockTransaction);
     reservationMockData.simulateFinanceGatewaySucceeds(reservation);
-    reservationMockData.simulateUpdateStatusFails(reservation);
+    reservationMockData.updateStatusSucceeds(reservation);
 
+    cancelReservationAndVerifyAssertions(mockTransaction, reservation);
+  }
+
+  private void cancelReservationAndVerifyAssertions(
+      MockTransaction mockTransaction, Reservation reservation) {
     Mono<RefundBreakdown> refundBreakdownMono =
         cancelReservationAsCustomerUseCase.cancelAsCustomer(reservation.getReservationId());
 
     StepVerifier.create(refundBreakdownMono)
-        .expectErrorSatisfies(
-            e -> {
-              Assert.assertEquals(e.getClass(), IllegalAccessError.class);
-              reservationVerificationRules.verifyTransactionWasRolledBack(mockTransaction);
+        .assertNext(
+            refundBreakdown -> {
+              reservationVerificationRules.verifyTransactionWasCommitted(mockTransaction);
               reservationVerificationRules.verifyStatusUpdateWasCalled(reservation);
+              reservationVerificationRules.verifyCancellationEventWasPublished(reservation);
             })
-        .verify();
+        .verifyComplete();
   }
 }
