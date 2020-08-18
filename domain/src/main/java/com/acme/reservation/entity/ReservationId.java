@@ -1,3 +1,8 @@
 package com.acme.reservation.entity;
 
-public class ReservationId {}
+import lombok.Value;
+
+@Value
+public class ReservationId {
+  String key;
+}

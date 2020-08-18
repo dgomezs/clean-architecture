@@ -1,3 +1,12 @@
 package com.acme.reservation.application.response;
 
-public class RefundBreakdown {}
+import com.acme.reservation.entity.Money;
+
+public class RefundBreakdown {
+
+  private Money amountToRefund;
+
+  public boolean isThereMoneyToRefundToCustomer() {
+    return true;
+  }
+}

@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @RunWith(Cucumber.class)
-@SpringBootTest(classes = CancellationConfig.class)
+@SpringBootTest(classes = ReservationTestConfig.class)
 @CucumberContextConfiguration
 @CucumberOptions(
     features = "classpath:features/cancellation",
