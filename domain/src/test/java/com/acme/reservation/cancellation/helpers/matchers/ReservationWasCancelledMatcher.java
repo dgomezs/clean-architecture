@@ -1,0 +1,21 @@
+package com.acme.reservation.cancellation.helpers.matchers;
+
+import com.acme.reservation.application.response.RefundBreakdown;
+import com.acme.reservation.entity.Reservation;
+import com.acme.reservation.entity.ReservationStatus;
+import lombok.AllArgsConstructor;
+import org.mockito.ArgumentMatcher;
+
+@AllArgsConstructor
+public class ReservationWasCancelledMatcher implements ArgumentMatcher<Reservation> {
+
+  private final Reservation reservation;
+  private final RefundBreakdown refundBreakdown;
+
+  @Override
+  public boolean matches(Reservation r) {
+    return ReservationStatus.CANCELLED.equals(r.getReservationStatus())
+        && refundBreakdown.equals(r.getCurrentRefund())
+        && reservation.getReservationId().equals(r.getReservationId());
+  }
+}

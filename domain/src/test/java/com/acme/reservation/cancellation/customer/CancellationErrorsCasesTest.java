@@ -1,7 +1,8 @@
-package com.acme.reservation.cancellation;
+package com.acme.reservation.cancellation.customer;
 
 import com.acme.reservation.application.response.RefundBreakdown;
 import com.acme.reservation.application.usecases.cancellation.customer.CancelReservationAsCustomerUseCase;
+import com.acme.reservation.cancellation.ReservationTestConfig;
 import com.acme.reservation.cancellation.helpers.MockTransaction;
 import com.acme.reservation.cancellation.helpers.ReservationMockData;
 import com.acme.reservation.cancellation.helpers.ReservationVerificationRules;

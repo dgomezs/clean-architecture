@@ -2,6 +2,8 @@ package com.acme.reservation.cancellation;
 
 import com.acme.reservation.application.event.ReservationEventPublisher;
 import com.acme.reservation.application.repository.ReservationRepository;
+import com.acme.reservation.application.usecases.cancellation.acme_team.CancelReservationAsAcmeTeamImpl;
+import com.acme.reservation.application.usecases.cancellation.acme_team.CancelReservationAsAcmeTeamUseCase;
 import com.acme.reservation.application.usecases.cancellation.customer.CancelReservationAsCustomerImpl;
 import com.acme.reservation.application.usecases.cancellation.customer.CancelReservationAsCustomerUseCase;
 import com.acme.reservation.cancellation.helpers.ReservationMockData;
@@ -61,6 +63,16 @@ public class ReservationTestConfig {
         eventBus,
         financeGateway,
         reactiveTransactionManager);
+  }
+
+  @Bean
+  public CancelReservationAsAcmeTeamUseCase cancelReservationAsAcmeTeamUseCase(
+      ReservationRepository reservationRepository,
+      ReservationEventPublisher eventBus,
+      FinanceGateway financeGateway,
+      ReactiveTransactionManager reactiveTransactionManager) {
+    return new CancelReservationAsAcmeTeamImpl(
+        reservationRepository, eventBus, financeGateway, reactiveTransactionManager);
   }
 
   @Bean

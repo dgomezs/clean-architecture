@@ -5,11 +5,11 @@ import com.acme.reservation.application.event.ReservationEvent;
 import com.acme.reservation.entity.Reservation;
 import org.mockito.ArgumentMatcher;
 
-public class ReservationWasCancelledEvent implements ArgumentMatcher<ReservationEvent> {
+public class ReservationWasCancelledMatcherEvent implements ArgumentMatcher<ReservationEvent> {
 
   private final Reservation reservation;
 
-  public ReservationWasCancelledEvent(Reservation reservation) {
+  public ReservationWasCancelledMatcherEvent(Reservation reservation) {
     this.reservation = reservation;
   }
 

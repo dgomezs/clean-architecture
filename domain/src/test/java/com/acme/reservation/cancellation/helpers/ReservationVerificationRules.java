@@ -7,10 +7,13 @@ import static org.mockito.Mockito.times;
 
 import com.acme.reservation.application.event.ReservationEventPublisher;
 import com.acme.reservation.application.repository.ReservationRepository;
-import com.acme.reservation.cancellation.helpers.matchers.ReservationWasCancelledEvent;
+import com.acme.reservation.application.response.RefundBreakdown;
+import com.acme.reservation.cancellation.helpers.matchers.ReservationWasCancelledMatcher;
+import com.acme.reservation.cancellation.helpers.matchers.ReservationWasCancelledMatcherEvent;
 import com.acme.reservation.entity.Reservation;
 import com.acme.reservation.gateway.FinanceGateway;
 import lombok.AllArgsConstructor;
+import org.junit.Assert;
 import org.mockito.Mockito;
 import org.springframework.transaction.ReactiveTransactionManager;
 
@@ -41,6 +44,26 @@ public class ReservationVerificationRules {
 
   public void verifyCancellationEventWasPublished(Reservation reservation) {
     Mockito.verify(this.eventPublisher, times(1))
-        .publish(argThat(new ReservationWasCancelledEvent(reservation)));
+        .publish(argThat(new ReservationWasCancelledMatcherEvent(reservation)));
+  }
+
+  public void verifyReservationWasRefunded(
+      RefundBreakdown refundBreakdown, Reservation reservation) {
+    if (refundBreakdown.isThereMoneyToRefundToCustomer()) {
+      Mockito.verify(this.financeGateway, times(1)).refundReservation(refundBreakdown, reservation);
+    }
+  }
+
+  public void verifyReservationWasCancelled(
+      Reservation reservation, RefundBreakdown refundBreakdown) {
+    Mockito.verify(this.reservationRepository, times(1))
+        .updateStatus(argThat(new ReservationWasCancelledMatcher(reservation, refundBreakdown)));
+  }
+
+  public void verifyAllMoneyWasRefunded(RefundBreakdown refundBreakdown, Reservation reservation) {
+    Assert.assertTrue(refundBreakdown.isThereMoneyToRefundToCustomer());
+    Assert.assertEquals(
+        refundBreakdown.getAmountToRefund(), reservation.getTotalRefundableMoneyToCustomer());
+    Mockito.verify(this.financeGateway, times(1)).refundReservation(refundBreakdown, reservation);
   }
 }

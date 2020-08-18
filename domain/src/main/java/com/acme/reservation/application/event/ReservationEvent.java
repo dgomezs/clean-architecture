@@ -7,6 +7,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public abstract class ReservationEvent {
 
-  @Getter
-  protected final Reservation reservation;
+  @Getter protected final Reservation reservation;
 }

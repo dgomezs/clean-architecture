@@ -1,7 +1,8 @@
-package com.acme.reservation.cancellation;
+package com.acme.reservation.cancellation.acme_team;
 
 import com.acme.reservation.application.response.RefundBreakdown;
-import com.acme.reservation.application.usecases.cancellation.customer.CancelReservationAsCustomerUseCase;
+import com.acme.reservation.application.usecases.cancellation.acme_team.CancelReservationAsAcmeTeamUseCase;
+import com.acme.reservation.cancellation.ReservationTestConfig;
 import com.acme.reservation.cancellation.helpers.MockTransaction;
 import com.acme.reservation.cancellation.helpers.ReservationMockData;
 import com.acme.reservation.cancellation.helpers.ReservationVerificationRules;
@@ -17,11 +18,11 @@ import reactor.test.StepVerifier;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ReservationTestConfig.class)
-public class CancellationSuccessfulCasesTest {
+public class CancellationAcmeTeamSuccessfulCasesTest {
 
   @Autowired private ReservationMockData reservationMockData;
   @Autowired private ReservationVerificationRules reservationVerificationRules;
-  @Autowired private CancelReservationAsCustomerUseCase cancelReservationAsCustomerUseCase;
+  @Autowired private CancelReservationAsAcmeTeamUseCase cancelReservationAsAcmeTeamUseCase;
 
   @Before
   public void cleanUpMocks() {
@@ -29,7 +30,7 @@ public class CancellationSuccessfulCasesTest {
   }
 
   @Test
-  public void ensureReservationIsCancelled() {
+  public void ensureReservationIsCancelledAndAllMoneyIsRefunded() {
     MockTransaction mockTransaction = new MockTransaction();
     Reservation reservation = reservationMockData.getRandomReservation();
     reservationMockData.configureTransaction(mockTransaction);
@@ -42,13 +43,16 @@ public class CancellationSuccessfulCasesTest {
   private void cancelReservationAndVerifyAssertions(
       MockTransaction mockTransaction, Reservation reservation) {
     Mono<RefundBreakdown> refundBreakdownMono =
-        cancelReservationAsCustomerUseCase.cancelAsCustomer(reservation.getReservationId());
+        cancelReservationAsAcmeTeamUseCase.cancelAsAcmeTeam(reservation.getReservationId());
 
     StepVerifier.create(refundBreakdownMono)
         .assertNext(
             refundBreakdown -> {
               reservationVerificationRules.verifyTransactionWasCommitted(mockTransaction);
-              reservationVerificationRules.verifyStatusUpdateWasCalled(reservation);
+              reservationVerificationRules.verifyReservationWasCancelled(
+                  reservation, refundBreakdown);
+              reservationVerificationRules.verifyAllMoneyWasRefunded(
+                  refundBreakdown, reservation);
               reservationVerificationRules.verifyCancellationEventWasPublished(reservation);
             })
         .verifyComplete();

@@ -8,7 +8,17 @@ public class Reservation {
 
   @Getter @Setter private ReservationId reservationId;
 
-  public void addRefund(RefundBreakdown refundBreakdown) {}
+  @Getter private ReservationStatus reservationStatus;
+  @Getter private RefundBreakdown currentRefund;
+  @Getter private Money reservationPrice;
 
-  public void cancel(RefundBreakdown refundBreakdown) {}
+  public void cancel(RefundBreakdown refundBreakdown) {
+    this.reservationStatus = ReservationStatus.CANCELLED;
+    this.currentRefund = refundBreakdown;
+  }
+
+  public Money getTotalRefundableMoneyToCustomer() {
+    // for now we assume that the total price of the reservation can be refunded
+    return reservationPrice;
+  }
 }
