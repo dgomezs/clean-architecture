@@ -55,7 +55,7 @@ public abstract class CancellationFlow {
   private Mono<Void> executeInTransaction(Mono<Void> toBeExecutedInTransaction) {
     TransactionalOperator transactionalOperator =
         TransactionalOperator.create(reactiveTransactionManager);
-    return transactionalOperator.transactional(toBeExecutedInTransaction);
+    return toBeExecutedInTransaction.as(transactionalOperator::transactional);
   }
 
   private void notifyReservationCancelled(Reservation reservation) {

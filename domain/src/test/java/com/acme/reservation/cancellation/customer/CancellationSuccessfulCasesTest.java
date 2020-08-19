@@ -27,12 +27,13 @@ public class CancellationSuccessfulCasesTest {
   @Before
   public void cleanUpMocks() {
     reservationMockData.cleanUpMocks();
+    reservationMockData.simulateCancellationDateInThePast();
   }
 
   @Test
   public void ensureReservationIsCancelled() {
     MockTransaction mockTransaction = new MockTransaction();
-    Reservation reservation = reservationMockData.getRandomReservation();
+    Reservation reservation = reservationMockData.getFlexReservation();
     reservationMockData.configureTransaction(mockTransaction);
     reservationMockData.simulateFinanceGatewaySucceeds(reservation);
     reservationMockData.updateStatusSucceeds(reservation);

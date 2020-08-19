@@ -5,9 +5,17 @@ import static org.mockito.ArgumentMatchers.eq;
 
 import com.acme.reservation.application.event.ReservationEventPublisher;
 import com.acme.reservation.application.repository.ReservationRepository;
+import com.acme.reservation.dto.CreateReservationDto;
+import com.acme.reservation.entity.Customer;
+import com.acme.reservation.entity.Money;
 import com.acme.reservation.entity.Reservation;
 import com.acme.reservation.entity.ReservationId;
+import com.acme.reservation.entity.cancellation.policy.CancellationPolicy;
 import com.acme.reservation.gateway.FinanceGateway;
+import java.math.BigDecimal;
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.mockito.Mockito;
@@ -20,12 +28,17 @@ public class ReservationMockData {
   private final ReactiveTransactionManager reactiveTransactionManager;
   private final FinanceGateway financeGateway;
   private final ReservationEventPublisher eventPublisher;
+  private final Clock clock;
 
-  public Reservation getRandomReservation() {
-    Reservation reservation = createRandomReservation();
+  public Reservation getFlexReservation() {
+    Reservation reservation = createRandomFlexReservation();
+    mockGetReservation(reservation);
+    return reservation;
+  }
+
+  public void mockGetReservation(Reservation reservation) {
     Mockito.when(this.reservationRepository.getReservationById(reservation.getReservationId()))
         .thenReturn(Mono.just(reservation));
-    return reservation;
   }
 
   public void configureTransaction(MockTransaction mockTransaction) {
@@ -36,13 +49,23 @@ public class ReservationMockData {
     Mockito.when(this.reactiveTransactionManager.rollback(mockTransaction)).thenReturn(getEmpty());
   }
 
+  public ReservationId randomReservationId() {
+    return new ReservationId(RandomStringUtils.randomAlphabetic(5));
+  }
+
   private Mono<Void> getEmpty() {
     return Mono.empty();
   }
 
-  private Reservation createRandomReservation() {
-    Reservation reservation = new Reservation();
-    reservation.setReservationId(new ReservationId(RandomStringUtils.randomAlphabetic(5)));
+  private Reservation createRandomFlexReservation() {
+    CreateReservationDto createReservationDto = new CreateReservationDto();
+    createReservationDto.setReservationPrice(new Money(BigDecimal.valueOf(100)));
+    createReservationDto.setCancellationPolicy(CancellationPolicy.FLEX);
+    createReservationDto.setCustomer(new Customer());
+    createReservationDto.setStartDate(LocalDateTime.now());
+    createReservationDto.setEndDate(LocalDateTime.now().plusDays(5));
+    Reservation reservation = new Reservation(createReservationDto);
+    reservation.setReservationId(randomReservationId());
     return reservation;
   }
 
@@ -70,5 +93,15 @@ public class ReservationMockData {
     Mockito.reset(financeGateway);
     Mockito.reset(reservationRepository);
     Mockito.reset(eventPublisher);
+    Mockito.reset(clock);
+  }
+
+  public void simulateClock(LocalDateTime cancellationDate) {
+    Mockito.when(clock.instant()).thenReturn(cancellationDate.toInstant(ZoneOffset.UTC));
+  }
+
+  public void simulateCancellationDateInThePast() {
+    Mockito.when(clock.instant())
+        .thenReturn(LocalDateTime.now().minusDays(5).toInstant(ZoneOffset.UTC));
   }
 }

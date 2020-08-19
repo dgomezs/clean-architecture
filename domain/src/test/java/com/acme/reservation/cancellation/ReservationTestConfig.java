@@ -8,9 +8,10 @@ import com.acme.reservation.application.usecases.cancellation.customer.CancelRes
 import com.acme.reservation.application.usecases.cancellation.customer.CancelReservationAsCustomerUseCase;
 import com.acme.reservation.cancellation.helpers.ReservationMockData;
 import com.acme.reservation.cancellation.helpers.ReservationVerificationRules;
-import com.acme.reservation.entity.cancellation.policy.CancellationPolicyFactory;
-import com.acme.reservation.entity.cancellation.policy.CancellationPolicyFactoryImpl;
+import com.acme.reservation.entity.cancellation.policy.CancellationPolicyCalculatorFactory;
+import com.acme.reservation.entity.cancellation.policy.CancellationPolicyCalculatorFactoryImpl;
 import com.acme.reservation.gateway.FinanceGateway;
+import java.time.Clock;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,8 +37,13 @@ public class ReservationTestConfig {
   }
 
   @Bean
-  public CancellationPolicyFactory cancellationPolicyFactory() {
-    return new CancellationPolicyFactoryImpl();
+  public Clock clock() {
+    return Mockito.mock(Clock.class);
+  }
+
+  @Bean
+  public CancellationPolicyCalculatorFactory cancellationPolicyFactory(Clock clock) {
+    return new CancellationPolicyCalculatorFactoryImpl(clock);
   }
 
   @Bean
@@ -53,13 +59,13 @@ public class ReservationTestConfig {
   @Bean
   public CancelReservationAsCustomerUseCase cancelReservationAsCustomerUseCase(
       ReservationRepository reservationRepository,
-      CancellationPolicyFactory cancellationPolicyFactory,
+      CancellationPolicyCalculatorFactory cancellationPolicyCalculatorFactory,
       ReservationEventPublisher eventBus,
       FinanceGateway financeGateway,
       ReactiveTransactionManager reactiveTransactionManager) {
     return new CancelReservationAsCustomerImpl(
         reservationRepository,
-        cancellationPolicyFactory,
+        cancellationPolicyCalculatorFactory,
         eventBus,
         financeGateway,
         reactiveTransactionManager);
@@ -80,9 +86,10 @@ public class ReservationTestConfig {
       ReservationRepository reservationRepository,
       ReactiveTransactionManager reactiveTransactionManager,
       FinanceGateway financeGateway,
-      ReservationEventPublisher eventPublisher) {
+      ReservationEventPublisher eventPublisher,
+      Clock clock) {
     return new ReservationMockData(
-        reservationRepository, reactiveTransactionManager, financeGateway, eventPublisher);
+        reservationRepository, reactiveTransactionManager, financeGateway, eventPublisher, clock);
   }
 
   @Bean

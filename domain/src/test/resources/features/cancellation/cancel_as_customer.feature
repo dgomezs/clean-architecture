@@ -9,4 +9,5 @@ Feature: Cancellation of an existing reservation
 
     Examples:
       | ReservationStartDate | ReservationEndDate | TotalReservationPrice | CancellationPolicy | ReservationCancellationTime | TotalRefundedMoney |
-      | 2020-08-01           | 2020-08-05       | 100                   | FLEXI              | 2020-07-01                  | 50                 |
+      | 2020-08-01 09:00     | 2020-08-05 15:00   | 100                   | FLEX               | 2020-07-01 08:00            | 100                |
+      | 2020-08-01 09:00     | 2020-08-05 15:00   | 100                   | FLEX               | 2020-08-01 08:00            | 0                  |

@@ -32,7 +32,7 @@ public class CancellationAcmeTeamSuccessfulCasesTest {
   @Test
   public void ensureReservationIsCancelledAndAllMoneyIsRefunded() {
     MockTransaction mockTransaction = new MockTransaction();
-    Reservation reservation = reservationMockData.getRandomReservation();
+    Reservation reservation = reservationMockData.getFlexReservation();
     reservationMockData.configureTransaction(mockTransaction);
     reservationMockData.simulateFinanceGatewaySucceeds(reservation);
     reservationMockData.updateStatusSucceeds(reservation);
@@ -51,8 +51,7 @@ public class CancellationAcmeTeamSuccessfulCasesTest {
               reservationVerificationRules.verifyTransactionWasCommitted(mockTransaction);
               reservationVerificationRules.verifyReservationWasCancelled(
                   reservation, refundBreakdown);
-              reservationVerificationRules.verifyAllMoneyWasRefunded(
-                  refundBreakdown, reservation);
+              reservationVerificationRules.verifyAllMoneyWasRefunded(refundBreakdown, reservation);
               reservationVerificationRules.verifyCancellationEventWasPublished(reservation);
             })
         .verifyComplete();

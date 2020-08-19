@@ -28,23 +28,23 @@ public class CancellationErrorsCasesTest {
   @Before
   public void cleanUpMocks() {
     reservationMockData.cleanUpMocks();
+    reservationMockData.simulateCancellationDateInThePast(); // makes sure there is a 100% refund
   }
 
   @Test
   public void ensureTransactionIsRollbackIfFinanceGatewayFailsButPersistenceSucceeds() {
     MockTransaction mockTransaction = new MockTransaction();
-    Reservation reservation = reservationMockData.getRandomReservation();
+    Reservation reservation = reservationMockData.getFlexReservation();
     reservationMockData.configureTransaction(mockTransaction);
     reservationMockData.simulateFinanceGatewayFails(reservation);
     reservationMockData.updateStatusSucceeds(reservation);
-
     cancelReservationAndVerifyAssertions(mockTransaction, reservation);
   }
 
   @Test
   public void ensureTransactionIsRollbackIfFinanceGatewaySucceedsButPersistenceFails() {
     MockTransaction mockTransaction = new MockTransaction();
-    Reservation reservation = reservationMockData.getRandomReservation();
+    Reservation reservation = reservationMockData.getFlexReservation();
     reservationMockData.configureTransaction(mockTransaction);
     reservationMockData.simulateFinanceGatewaySucceeds(reservation);
     reservationMockData.simulateUpdateStatusFails(reservation);
