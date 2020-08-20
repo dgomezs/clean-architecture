@@ -1,8 +1,8 @@
 package com.acme.reservation.entity;
 
+import com.acme.reservation.application.repository.LoadCancellationDto;
+import com.acme.reservation.application.request.CreateReservationDto;
 import com.acme.reservation.application.response.RefundBreakdown;
-import com.acme.reservation.dto.CreateReservationDto;
-import com.acme.reservation.dto.LoadCancellationDto;
 import com.acme.reservation.entity.cancellation.policy.CancellationPolicy;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -17,6 +17,10 @@ public class Reservation extends SelfValidating<Reservation> {
   @NotNull(message = "the reservation needs to have a start date")
   @Getter
   private final LocalDateTime startDate;
+
+  @NotNull(message = "the reservation needs to have a destination")
+  @Getter
+  private final Destination destination;
 
   @NotNull(message = "the reservation needs to have an end date")
   @Getter
@@ -48,6 +52,7 @@ public class Reservation extends SelfValidating<Reservation> {
     this.startDate = dto.getStartDate();
     this.endDate = dto.getEndDate();
     this.customer = dto.getCustomer();
+    this.destination = dto.getDestination();
     this.validateSelf();
   }
 
@@ -60,6 +65,7 @@ public class Reservation extends SelfValidating<Reservation> {
     this.startDate = dto.getStartDate();
     this.endDate = dto.getEndDate();
     this.customer = dto.getCustomer();
+    this.destination = dto.getDestination();
     this.validateSelf();
   }
 

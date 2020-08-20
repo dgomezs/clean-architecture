@@ -1,7 +1,8 @@
-package com.acme.reservation.dto;
+package com.acme.reservation.application.repository;
 
 import com.acme.reservation.application.response.RefundBreakdown;
 import com.acme.reservation.entity.Customer;
+import com.acme.reservation.entity.Destination;
 import com.acme.reservation.entity.Money;
 import com.acme.reservation.entity.ReservationId;
 import com.acme.reservation.entity.ReservationStatus;
@@ -13,7 +14,7 @@ import lombok.Data;
 @Data
 public class LoadCancellationDto {
   private ReservationId reservationId;
-
+  private Destination destination;
   private LocalDateTime startDate;
   private LocalDateTime endDate;
 

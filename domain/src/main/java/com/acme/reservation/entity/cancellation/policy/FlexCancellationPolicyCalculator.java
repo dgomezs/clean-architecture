@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.ZoneOffset;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -29,7 +28,8 @@ public class FlexCancellationPolicyCalculator implements CancellationPolicyCalcu
   }
 
   private boolean lessThan24hBeforeReservationStarts(Reservation reservation) {
-    Instant startOfReservation = reservation.getStartDate().toInstant(ZoneOffset.UTC);
+    Instant startOfReservation =
+        reservation.getStartDate().atZone(reservation.getDestination().getTimeZone()).toInstant();
     Instant currentTime = Instant.now(clock);
     long hoursToStartOfReservation = Duration.between(currentTime, startOfReservation).toHours();
     return hoursToStartOfReservation < HOURS_CUT_OFF_FOR_FLEX;

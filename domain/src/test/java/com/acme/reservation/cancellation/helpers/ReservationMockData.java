@@ -5,7 +5,7 @@ import static org.mockito.ArgumentMatchers.eq;
 
 import com.acme.reservation.application.event.ReservationEventPublisher;
 import com.acme.reservation.application.repository.ReservationRepository;
-import com.acme.reservation.dto.CreateReservationDto;
+import com.acme.reservation.application.request.CreateReservationDto;
 import com.acme.reservation.entity.Customer;
 import com.acme.reservation.entity.Money;
 import com.acme.reservation.entity.Reservation;
@@ -15,6 +15,7 @@ import com.acme.reservation.gateway.FinanceGateway;
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -96,8 +97,8 @@ public class ReservationMockData {
     Mockito.reset(clock);
   }
 
-  public void simulateClock(LocalDateTime cancellationDate) {
-    Mockito.when(clock.instant()).thenReturn(cancellationDate.toInstant(ZoneOffset.UTC));
+  public void simulateClock(LocalDateTime cancellationDate, ZoneId zoneId) {
+    Mockito.when(clock.instant()).thenReturn(cancellationDate.atZone(zoneId).toInstant());
   }
 
   public void simulateCancellationDateInThePast() {
