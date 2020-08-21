@@ -26,5 +26,9 @@ public class ReservationAdapterTest {
 
     Assert.assertEquals(
         reservationPersistence.getReservationId(), reservation.getReservationId().getKey());
+    Assert.assertEquals(reservationPersistence.getCustomerId(), reservation.getCustomer().getId());
+    Assert.assertEquals(reservation.getCustomer().getId(), reservationPersistence.getCustomerId());
+    Assert.assertEquals(
+        reservation.getDestination().getId(), reservationPersistence.getDestinationId());
   }
 }

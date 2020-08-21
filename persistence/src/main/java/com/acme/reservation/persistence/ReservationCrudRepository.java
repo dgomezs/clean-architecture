@@ -2,6 +2,8 @@ package com.acme.reservation.persistence;
 
 import com.acme.reservation.persistence.model.ReservationPersistence;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ReservationRepository
+@Repository
+public interface ReservationCrudRepository
     extends ReactiveCrudRepository<ReservationPersistence, String> {}

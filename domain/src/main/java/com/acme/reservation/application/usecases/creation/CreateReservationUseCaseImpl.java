@@ -12,8 +12,8 @@ public class CreateReservationUseCaseImpl implements CreateReservationUseCase {
   private final ReservationRepository reservationRepository;
 
   public Mono<Reservation> createReservation(CreateReservationDto createReservationDto) {
-    return this.reservationRepository
-        .createReservation(createReservationDto)
+    return Mono.just(new Reservation(createReservationDto))
+        .flatMap(this.reservationRepository::createReservation)
         .flatMap(this.reservationRepository::getReservationById);
   }
 }

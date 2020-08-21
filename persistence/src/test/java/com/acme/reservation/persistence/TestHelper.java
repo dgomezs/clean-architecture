@@ -36,16 +36,11 @@ public class TestHelper {
         .email(new Email(EMAIL))
         .firstName(FIRST_NAME)
         .lastName(LAST_NAME)
-        .id(ID)
         .build();
   }
 
   public static Destination createDestination() {
-    return Destination.builder()
-        .id(ID)
-        .timeZone(ZoneId.systemDefault())
-        .name(DESTINATION_NAME)
-        .build();
+    return Destination.builder().timeZone(ZoneId.systemDefault()).name(DESTINATION_NAME).build();
   }
 
   public static CustomerPersistence createCustomerPersistence() {
