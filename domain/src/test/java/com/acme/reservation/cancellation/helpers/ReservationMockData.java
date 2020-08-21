@@ -7,6 +7,7 @@ import com.acme.reservation.application.event.ReservationEventPublisher;
 import com.acme.reservation.application.repository.ReservationRepository;
 import com.acme.reservation.application.request.CreateReservationDto;
 import com.acme.reservation.entity.Customer;
+import com.acme.reservation.entity.Destination;
 import com.acme.reservation.entity.Money;
 import com.acme.reservation.entity.Reservation;
 import com.acme.reservation.entity.ReservationId;
@@ -19,6 +20,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.mockito.Mockito;
 import org.springframework.transaction.ReactiveTransactionManager;
 import reactor.core.publisher.Mono;
@@ -59,15 +61,26 @@ public class ReservationMockData {
   }
 
   private Reservation createRandomFlexReservation() {
-    CreateReservationDto createReservationDto = new CreateReservationDto();
-    createReservationDto.setReservationPrice(new Money(BigDecimal.valueOf(100)));
-    createReservationDto.setCancellationPolicy(CancellationPolicy.FLEX);
-    createReservationDto.setCustomer(new Customer());
-    createReservationDto.setStartDate(LocalDateTime.now());
-    createReservationDto.setEndDate(LocalDateTime.now().plusDays(5));
+    CreateReservationDto createReservationDto =
+        CreateReservationDto.builder()
+            .reservationPrice(new Money(BigDecimal.valueOf(100)))
+            .cancellationPolicy(CancellationPolicy.FLEX)
+            .customer(new Customer())
+            .startDate(LocalDateTime.now())
+            .endDate(LocalDateTime.now().plusDays(5))
+            .destination(getRandomDestination())
+            .build();
     Reservation reservation = new Reservation(createReservationDto);
     reservation.setReservationId(randomReservationId());
     return reservation;
+  }
+
+  private Destination getRandomDestination() {
+    Destination destination = new Destination();
+    destination.setTimeZone(ZoneId.systemDefault());
+    destination.setName(RandomStringUtils.randomAlphabetic(5));
+    destination.setId(RandomUtils.nextLong());
+    return destination;
   }
 
   public void simulateFinanceGatewayFails(Reservation reservation) {

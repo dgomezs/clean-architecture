@@ -9,19 +9,21 @@ import com.acme.reservation.entity.ReservationStatus;
 import com.acme.reservation.entity.cancellation.policy.CancellationPolicy;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 
-@Data
+@Builder
+@Getter
 public class LoadCancellationDto {
-  private ReservationId reservationId;
-  private Destination destination;
-  private LocalDateTime startDate;
-  private LocalDateTime endDate;
+  private final ReservationId reservationId;
+  private final Destination destination;
+  private final LocalDateTime startDate;
+  private final LocalDateTime endDate;
 
-  private ReservationStatus reservationStatus;
-  private RefundBreakdown currentRefund;
-  private Money reservationPrice;
-  private CancellationPolicy cancellationPolicy;
-  private Instant cancellationTimestamp;
-  private Customer customer;
+  private final ReservationStatus reservationStatus;
+  private final RefundBreakdown currentRefund;
+  private final Money reservationPrice;
+  private final CancellationPolicy cancellationPolicy;
+  private final Instant cancellationTimestamp;
+  private final Customer customer;
 }

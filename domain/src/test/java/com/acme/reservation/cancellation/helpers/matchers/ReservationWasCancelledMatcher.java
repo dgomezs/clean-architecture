@@ -15,7 +15,7 @@ public class ReservationWasCancelledMatcher implements ArgumentMatcher<Reservati
   @Override
   public boolean matches(Reservation r) {
     return ReservationStatus.CANCELLED.equals(r.getReservationStatus())
-        && refundBreakdown.equals(r.getCurrentRefund())
+        && refundBreakdown.equals(r.getCurrentRefund().orElseThrow())
         && reservation.getReservationId().equals(r.getReservationId());
   }
 }

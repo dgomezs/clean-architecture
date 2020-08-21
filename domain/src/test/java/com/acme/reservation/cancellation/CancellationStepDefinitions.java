@@ -45,16 +45,14 @@ public class CancellationStepDefinitions {
   @DataTableType
   public CreateReservationDto createReservationDto(Map<String, String> entry) {
 
-    CreateReservationDto createReservationDto = new CreateReservationDto();
-    createReservationDto.setCustomer(createRandomCustomer());
-    createReservationDto.setDestination(
-        createDestinationInTimeZone(entry.get("DestinationTimeZone")));
-    createReservationDto.setStartDate(date(entry.get("ReservationStartDate")));
-    createReservationDto.setEndDate(date(entry.get("ReservationEndDate")));
-    createReservationDto.setReservationPrice(money(entry.get("TotalReservationPrice")));
-    createReservationDto.setCancellationPolicy(cancellationPolicy(entry.get("CancellationPolicy")));
-
-    return createReservationDto;
+    return CreateReservationDto.builder()
+        .customer(createRandomCustomer())
+        .destination(createDestinationInTimeZone(entry.get("DestinationTimeZone")))
+        .startDate(date(entry.get("ReservationStartDate")))
+        .endDate(date(entry.get("ReservationEndDate")))
+        .reservationPrice(money(entry.get("TotalReservationPrice")))
+        .cancellationPolicy(cancellationPolicy(entry.get("CancellationPolicy")))
+        .build();
   }
 
   @ParameterType(".*")

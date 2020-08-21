@@ -6,6 +6,7 @@ import com.acme.reservation.application.response.RefundBreakdown;
 import com.acme.reservation.entity.cancellation.policy.CancellationPolicy;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,8 +43,8 @@ public class Reservation extends SelfValidating<Reservation> {
   @Getter
   private ReservationStatus reservationStatus;
 
-  @Getter private RefundBreakdown currentRefund;
-  @Getter private Instant cancellationTimestamp;
+  private RefundBreakdown currentRefund;
+  private Instant cancellationTimestamp;
 
   public Reservation(CreateReservationDto dto) {
     this.reservationStatus = ReservationStatus.CREATED;
@@ -79,5 +80,13 @@ public class Reservation extends SelfValidating<Reservation> {
   public Money getTotalRefundableMoneyToCustomer() {
     // for now we assume that the total price of the reservation can be refunded
     return reservationPrice;
+  }
+
+  public Optional<RefundBreakdown> getCurrentRefund() {
+    return Optional.ofNullable(currentRefund);
+  }
+
+  public Optional<Instant> getCancellationTimestamp() {
+    return Optional.ofNullable(cancellationTimestamp);
   }
 }
