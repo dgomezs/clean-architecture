@@ -68,6 +68,7 @@ public class Reservation extends SelfValidating<Reservation> {
     this.customer = dto.getCustomer();
     this.destination = dto.getDestination();
     this.validateSelf();
+    this.validateStatus();
   }
 
   public void cancel(RefundBreakdown refundBreakdown) {
@@ -88,5 +89,19 @@ public class Reservation extends SelfValidating<Reservation> {
 
   public Optional<Instant> getCancellationTimestamp() {
     return Optional.ofNullable(cancellationTimestamp);
+  }
+
+  private void validateStatus() {
+    checkCancellationRules();
+  }
+
+  private void checkCancellationRules() {
+    if (ReservationStatus.CANCELLED.equals(this.reservationStatus)
+        && getCancellationTimestamp().isEmpty()) {
+      throw new IllegalStateException(
+          String.format(
+              "Reservation %s is status cancelled without a cancellation timestamp",
+              reservationId.getKey()));
+    }
   }
 }
