@@ -8,6 +8,7 @@ import com.acme.reservation.application.repository.ReservationRepository;
 import com.acme.reservation.application.request.CreateReservationDto;
 import com.acme.reservation.entity.Customer;
 import com.acme.reservation.entity.Destination;
+import com.acme.reservation.entity.Email;
 import com.acme.reservation.entity.Money;
 import com.acme.reservation.entity.Reservation;
 import com.acme.reservation.entity.ReservationId;
@@ -53,7 +54,7 @@ public class ReservationMockData {
   }
 
   public ReservationId randomReservationId() {
-    return new ReservationId(RandomStringUtils.randomAlphabetic(5));
+    return new ReservationId(getRandomString());
   }
 
   private Mono<Void> getEmpty() {
@@ -65,7 +66,7 @@ public class ReservationMockData {
         CreateReservationDto.builder()
             .reservationPrice(new Money(BigDecimal.valueOf(100)))
             .cancellationPolicy(CancellationPolicy.FLEX)
-            .customer(new Customer())
+            .customer(getRandomCustomer())
             .startDate(LocalDateTime.now())
             .endDate(LocalDateTime.now().plusDays(5))
             .destination(getRandomDestination())
@@ -75,12 +76,24 @@ public class ReservationMockData {
     return reservation;
   }
 
-  private Destination getRandomDestination() {
-    Destination destination = new Destination();
-    destination.setTimeZone(ZoneId.systemDefault());
-    destination.setName(RandomStringUtils.randomAlphabetic(5));
-    destination.setId(RandomUtils.nextLong());
-    return destination;
+  public Customer getRandomCustomer() {
+    return Customer.builder()
+        .email(new Email(getRandomString() + "@acme.com"))
+        .firstName(getRandomString())
+        .id(RandomUtils.nextLong())
+        .build();
+  }
+
+  public Destination getRandomDestination() {
+    return Destination.builder()
+        .timeZone(ZoneId.systemDefault())
+        .name(getRandomString())
+        .id(RandomUtils.nextLong())
+        .build();
+  }
+
+  public String getRandomString() {
+    return RandomStringUtils.randomAlphabetic(5);
   }
 
   public void simulateFinanceGatewayFails(Reservation reservation) {

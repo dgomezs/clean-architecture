@@ -2,21 +2,22 @@ package com.acme.reservation.entity;
 
 import java.time.ZoneId;
 import javax.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Builder;
 import lombok.Getter;
 
-@Data
+@Builder
+@Getter
 public class Destination extends SelfValidating<Destination> {
 
   @NotNull(message = "the destination must have an id")
   @Getter
-  private Long id;
+  private final Long id;
 
   @NotNull(message = "the destination must have a name")
   @Getter
-  private String name;
+  private final String name;
 
   @NotNull(message = "the destination must have a time zone")
   @Getter
-  private ZoneId timeZone;
+  private final ZoneId timeZone;
 }

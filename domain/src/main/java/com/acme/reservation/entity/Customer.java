@@ -1,11 +1,13 @@
 package com.acme.reservation.entity;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 
-@Data
-public class Customer {
-  private Long id;
-  private String firstName;
-  private String lastName;
-  private Email email;
+@Builder
+@Getter
+public class Customer extends SelfValidating<Customer> {
+  private final Long id;
+  private final String firstName;
+  private final String lastName;
+  private final Email email;
 }

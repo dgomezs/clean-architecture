@@ -5,7 +5,6 @@ import com.acme.reservation.application.response.RefundBreakdown;
 import com.acme.reservation.application.usecases.cancellation.customer.CancelReservationAsCustomerUseCase;
 import com.acme.reservation.cancellation.helpers.MockTransaction;
 import com.acme.reservation.cancellation.helpers.ReservationMockData;
-import com.acme.reservation.entity.Customer;
 import com.acme.reservation.entity.Destination;
 import com.acme.reservation.entity.Money;
 import com.acme.reservation.entity.Reservation;
@@ -23,7 +22,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +44,7 @@ public class CancellationStepDefinitions {
   public CreateReservationDto createReservationDto(Map<String, String> entry) {
 
     return CreateReservationDto.builder()
-        .customer(createRandomCustomer())
+        .customer(reservationMockData.getRandomCustomer())
         .destination(createDestinationInTimeZone(entry.get("DestinationTimeZone")))
         .startDate(date(entry.get("ReservationStartDate")))
         .endDate(date(entry.get("ReservationEndDate")))
@@ -107,10 +105,6 @@ public class CancellationStepDefinitions {
         .verifyComplete();
   }
 
-  private Customer createRandomCustomer() {
-    return new Customer();
-  }
-
   private void configureMocks(Reservation reservation) {
     MockTransaction mockTransaction = new MockTransaction();
     reservationMockData.configureTransaction(mockTransaction);
@@ -121,10 +115,10 @@ public class CancellationStepDefinitions {
 
   private Destination createDestinationInTimeZone(String destinationTimeZone) {
     ZoneId timezone = ZoneId.of(destinationTimeZone);
-    Destination destination = new Destination();
-    destination.setId(RandomUtils.nextLong());
-    destination.setName(RandomStringUtils.randomAlphabetic(5));
-    destination.setTimeZone(timezone);
-    return destination;
+    return Destination.builder()
+        .id(RandomUtils.nextLong())
+        .name(reservationMockData.getRandomString())
+        .timeZone(timezone)
+        .build();
   }
 }

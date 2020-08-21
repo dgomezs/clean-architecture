@@ -1,6 +1,6 @@
 package com.acme.reservation.entity;
 
-import com.acme.reservation.application.repository.LoadCancellationDto;
+import com.acme.reservation.application.repository.LoadReservationDto;
 import com.acme.reservation.application.request.CreateReservationDto;
 import com.acme.reservation.application.response.RefundBreakdown;
 import com.acme.reservation.entity.cancellation.policy.CancellationPolicy;
@@ -57,7 +57,7 @@ public class Reservation extends SelfValidating<Reservation> {
     this.validateSelf();
   }
 
-  public Reservation(LoadCancellationDto dto) {
+  public Reservation(LoadReservationDto dto) {
     this.reservationId = dto.getReservationId();
     this.reservationStatus = dto.getReservationStatus();
     this.reservationPrice = dto.getReservationPrice();

@@ -5,5 +5,4 @@ import reactor.core.publisher.Flux;
 
 public interface SearchReservationCustomerUseCase {
   Flux<ReservationListingCustomer> searchReservationsForCustomers(Long customerId);
-
 }

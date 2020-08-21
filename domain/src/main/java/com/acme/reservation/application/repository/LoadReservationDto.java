@@ -14,7 +14,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class LoadCancellationDto {
+public class LoadReservationDto {
   private final ReservationId reservationId;
   private final Destination destination;
   private final LocalDateTime startDate;
