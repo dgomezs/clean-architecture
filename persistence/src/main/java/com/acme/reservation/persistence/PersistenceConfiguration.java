@@ -18,6 +18,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration;
 import org.springframework.data.r2dbc.connectionfactory.init.ResourceDatabasePopulator;
+import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 
 @Configuration
@@ -49,14 +50,16 @@ public class PersistenceConfiguration extends AbstractR2dbcConfiguration {
       DestinationCrudRepository destinationCrudRepository,
       ReservationAdapter reservationAdapter,
       CustomerAdapter customerAdapter,
-      DestinationAdapter destinationAdapter) {
+      DestinationAdapter destinationAdapter,
+      DatabaseClient databaseClient) {
     return new ReservationRepositoryImpl(
         reservationCrudRepository,
         customerCrudRepository,
         destinationCrudRepository,
         reservationAdapter,
         customerAdapter,
-        destinationAdapter);
+        destinationAdapter,
+        databaseClient);
   }
 
   @Bean

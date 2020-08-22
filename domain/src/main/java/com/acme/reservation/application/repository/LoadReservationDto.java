@@ -20,9 +20,9 @@ public class LoadReservationDto {
   private final LocalDateTime startDate;
   private final LocalDateTime endDate;
 
-  private final ReservationStatus reservationStatus;
+  private final ReservationStatus status;
   private final RefundBreakdown currentRefund;
-  private final Money reservationPrice;
+  private final Money price;
   private final CancellationPolicy cancellationPolicy;
   private final Instant cancellationTimestamp;
   private final Customer customer;

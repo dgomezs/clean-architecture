@@ -48,7 +48,7 @@ public class CancellationStepDefinitions {
         .destination(createDestinationInTimeZone(entry.get("DestinationTimeZone")))
         .startDate(date(entry.get("ReservationStartDate")))
         .endDate(date(entry.get("ReservationEndDate")))
-        .reservationPrice(money(entry.get("TotalReservationPrice")))
+        .price(money(entry.get("TotalReservationPrice")))
         .cancellationPolicy(cancellationPolicy(entry.get("CancellationPolicy")))
         .build();
   }

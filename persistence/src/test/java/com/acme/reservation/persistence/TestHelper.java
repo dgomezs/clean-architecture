@@ -59,10 +59,10 @@ public class TestHelper {
             .customer(createCustomer())
             .destination(createDestination())
             .reservationId(new ReservationId(getRandomString()))
-            .reservationStatus(ReservationStatus.CREATED)
+            .status(ReservationStatus.CREATED)
             .startDate(LocalDateTime.now())
             .endDate(LocalDateTime.now().plusDays(5))
-            .reservationPrice(new Money(BigDecimal.valueOf(100)))
+            .price(new Money(BigDecimal.valueOf(100)))
             .build();
     return new Reservation(dto);
   }

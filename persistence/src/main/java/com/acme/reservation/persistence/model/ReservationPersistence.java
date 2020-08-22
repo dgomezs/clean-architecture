@@ -5,21 +5,17 @@ import com.acme.reservation.entity.cancellation.policy.CancellationPolicy;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import lombok.Builder;
 import lombok.Data;
-import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Data
-@Builder
 @Table("reservation")
 public class ReservationPersistence implements Persistable<String> {
 
-  @Id
-  private String reservationId;
+  @Id private String reservationId;
 
   private LocalDateTime startDate;
 
@@ -32,13 +28,10 @@ public class ReservationPersistence implements Persistable<String> {
   private Long customerId;
   private Long destinationId;
 
-  private ReservationStatus reservationStatus;
+  private ReservationStatus status;
 
   private Instant cancellationTimestamp;
-  @Transient
-  @Setter
-  private boolean newReservation = false;
-
+  @Transient private boolean newReservation;
 
   @Override
   public String getId() {

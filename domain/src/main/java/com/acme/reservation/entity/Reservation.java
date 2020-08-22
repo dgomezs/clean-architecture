@@ -29,7 +29,7 @@ public class Reservation extends SelfValidating<Reservation> {
 
   @NotNull(message = "the reservation needs to have a price")
   @Getter
-  private final Money reservationPrice;
+  private final Money price;
 
   @NotNull(message = "the reservation needs to have a cancellation policy")
   @Getter
@@ -41,14 +41,14 @@ public class Reservation extends SelfValidating<Reservation> {
 
   @NotNull(message = "the reservation needs to have a status")
   @Getter
-  private ReservationStatus reservationStatus;
+  private ReservationStatus status;
 
   private RefundBreakdown currentRefund;
   private Instant cancellationTimestamp;
 
   public Reservation(CreateReservationDto dto) {
-    this.reservationStatus = ReservationStatus.CREATED;
-    this.reservationPrice = dto.getReservationPrice();
+    this.status = ReservationStatus.CREATED;
+    this.price = dto.getPrice();
     this.cancellationPolicy = dto.getCancellationPolicy();
     this.startDate = dto.getStartDate();
     this.endDate = dto.getEndDate();
@@ -59,8 +59,8 @@ public class Reservation extends SelfValidating<Reservation> {
 
   public Reservation(LoadReservationDto dto) {
     this.reservationId = dto.getReservationId();
-    this.reservationStatus = dto.getReservationStatus();
-    this.reservationPrice = dto.getReservationPrice();
+    this.status = dto.getStatus();
+    this.price = dto.getPrice();
     this.cancellationPolicy = dto.getCancellationPolicy();
     this.cancellationTimestamp = dto.getCancellationTimestamp();
     this.startDate = dto.getStartDate();
@@ -72,7 +72,7 @@ public class Reservation extends SelfValidating<Reservation> {
   }
 
   public void cancel(RefundBreakdown refundBreakdown) {
-    this.reservationStatus = ReservationStatus.CANCELLED;
+    this.status = ReservationStatus.CANCELLED;
     this.currentRefund = refundBreakdown;
     this.cancellationTimestamp = Instant.now();
     this.validateSelf();
@@ -80,7 +80,7 @@ public class Reservation extends SelfValidating<Reservation> {
 
   public Money getTotalRefundableMoneyToCustomer() {
     // for now we assume that the total price of the reservation can be refunded
-    return reservationPrice;
+    return price;
   }
 
   public Optional<RefundBreakdown> getCurrentRefund() {
@@ -96,8 +96,7 @@ public class Reservation extends SelfValidating<Reservation> {
   }
 
   private void checkCancellationRules() {
-    if (ReservationStatus.CANCELLED.equals(this.reservationStatus)
-        && getCancellationTimestamp().isEmpty()) {
+    if (ReservationStatus.CANCELLED.equals(this.status) && getCancellationTimestamp().isEmpty()) {
       throw new IllegalStateException(
           String.format(
               "Reservation %s is status cancelled without a cancellation timestamp",

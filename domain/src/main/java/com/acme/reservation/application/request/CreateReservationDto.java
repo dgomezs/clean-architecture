@@ -13,7 +13,7 @@ import lombok.Getter;
 public class CreateReservationDto {
   private final LocalDateTime startDate;
   private final LocalDateTime endDate;
-  private final Money reservationPrice;
+  private final Money price;
   private final CancellationPolicy cancellationPolicy;
   private final Customer customer;
   private final Destination destination;

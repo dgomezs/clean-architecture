@@ -9,8 +9,10 @@ import com.acme.reservation.persistence.adapters.ReservationAdapter;
 import com.acme.reservation.persistence.model.CustomerPersistence;
 import com.acme.reservation.persistence.model.DestinationPersistence;
 import com.acme.reservation.persistence.model.ReservationPersistence;
+import com.acme.reservation.persistence.model.ReservationRow;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import org.springframework.data.r2dbc.core.DatabaseClient;
 import reactor.core.publisher.Mono;
 
 @AllArgsConstructor
@@ -22,6 +24,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
   private final ReservationAdapter reservationAdapter;
   private final CustomerAdapter customerAdapter;
   private final DestinationAdapter destinationAdapter;
+  private final DatabaseClient databaseClient;
 
   public Mono<ReservationId> createReservation(Reservation reservation) {
     ReservationPersistence reservationPersistence =
@@ -62,7 +65,20 @@ public class ReservationRepositoryImpl implements ReservationRepository {
   }
 
   public Mono<Reservation> getReservationById(ReservationId reservationId) {
-    return null;
+
+    final String sql =
+        "SELECT * FROM reservation  r "
+            + "JOIN customer c ON c.id = r.customer_id  "
+            + "JOIN destination d ON d.id = r.destination_id WHERE r.reservation_id = $1";
+
+    Mono<ReservationRow> reservationRowMono =
+        databaseClient
+            .execute(sql)
+            .bind("$1", reservationId.getKey())
+            .as(ReservationRow.class)
+            .fetch()
+            .one();
+    return reservationRowMono.map(reservationAdapter::toReservation).map(Reservation::new);
   }
 
   public Mono<Void> updateStatus(Reservation reservation) {

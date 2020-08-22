@@ -64,7 +64,7 @@ public class ReservationMockData {
   private Reservation createRandomFlexReservation() {
     CreateReservationDto createReservationDto =
         CreateReservationDto.builder()
-            .reservationPrice(new Money(BigDecimal.valueOf(100)))
+            .price(new Money(BigDecimal.valueOf(100)))
             .cancellationPolicy(CancellationPolicy.FLEX)
             .customer(getRandomCustomer())
             .startDate(LocalDateTime.now())
