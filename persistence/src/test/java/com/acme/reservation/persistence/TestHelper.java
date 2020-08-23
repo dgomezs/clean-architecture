@@ -66,4 +66,19 @@ public class TestHelper {
             .build();
     return new Reservation(dto);
   }
+
+  public static Reservation createCompletedReservation() {
+    LoadReservationDto dto =
+        LoadReservationDto.builder()
+            .cancellationPolicy(CancellationPolicy.FLEX)
+            .customer(createCustomer())
+            .destination(createDestination())
+            .reservationId(new ReservationId(getRandomString()))
+            .status(ReservationStatus.COMPLETED)
+            .startDate(LocalDateTime.now().minusDays(30))
+            .endDate(LocalDateTime.now().minusDays(25))
+            .price(new Money(BigDecimal.valueOf(100)))
+            .build();
+    return new Reservation(dto);
+  }
 }

@@ -6,6 +6,9 @@ import com.acme.reservation.entity.ReservationId;
 import com.acme.reservation.persistence.adapters.CustomerAdapter;
 import com.acme.reservation.persistence.adapters.DestinationAdapter;
 import com.acme.reservation.persistence.adapters.ReservationAdapter;
+import com.acme.reservation.persistence.crud.CustomerCrudRepository;
+import com.acme.reservation.persistence.crud.DestinationCrudRepository;
+import com.acme.reservation.persistence.crud.ReservationCrudRepository;
 import com.acme.reservation.persistence.model.CustomerPersistence;
 import com.acme.reservation.persistence.model.DestinationPersistence;
 import com.acme.reservation.persistence.model.ReservationPersistence;
@@ -66,10 +69,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 
   public Mono<Reservation> getReservationById(ReservationId reservationId) {
 
-    final String sql =
-        "SELECT * FROM reservation  r "
-            + "JOIN customer c ON c.id = r.customer_id  "
-            + "JOIN destination d ON d.id = r.destination_id WHERE r.reservation_id = $1";
+    final String sql = SqlQuery.reservationQuery + " WHERE r.reservation_id = $1";
 
     Mono<ReservationRow> reservationRowMono =
         databaseClient

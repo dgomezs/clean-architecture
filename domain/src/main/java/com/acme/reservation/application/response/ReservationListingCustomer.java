@@ -20,11 +20,11 @@ public class ReservationListingCustomer {
 
   private final LocalDateTime endDate;
 
-  private final Money reservationPrice;
+  private final Money price;
 
   private final CancellationPolicy cancellationPolicy;
 
-  private final ReservationStatus reservationStatus;
+  private final ReservationStatus status;
 
   private Instant cancellationTimestamp;
 

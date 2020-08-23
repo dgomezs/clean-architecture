@@ -1,4 +1,4 @@
-package com.acme.reservation.persistence;
+package com.acme.reservation.persistence.crud;
 
 import com.acme.reservation.persistence.model.DestinationPersistence;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;

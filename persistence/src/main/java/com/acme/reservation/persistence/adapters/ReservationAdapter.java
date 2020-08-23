@@ -1,6 +1,8 @@
 package com.acme.reservation.persistence.adapters;
 
 import com.acme.reservation.application.repository.LoadReservationDto;
+import com.acme.reservation.application.response.ReservationListingAcmeTeam;
+import com.acme.reservation.application.response.ReservationListingCustomer;
 import com.acme.reservation.entity.Customer;
 import com.acme.reservation.entity.Destination;
 import com.acme.reservation.entity.Email;
@@ -65,4 +67,9 @@ public interface ReservationAdapter {
   default <T> T unwrap(Optional<T> optional) {
     return optional.orElse(null);
   }
+
+  ReservationListingCustomer toReservationListingCustomer(ReservationRow reservationRow);
+
+  @Mapping(target = "reservationListingCustomer", source = ".")
+  ReservationListingAcmeTeam toReservationListingAcmeTeam(ReservationRow reservationRow);
 }

@@ -5,6 +5,9 @@ import com.acme.reservation.application.repository.SearchReservationRepository;
 import com.acme.reservation.persistence.adapters.CustomerAdapter;
 import com.acme.reservation.persistence.adapters.DestinationAdapter;
 import com.acme.reservation.persistence.adapters.ReservationAdapter;
+import com.acme.reservation.persistence.crud.CustomerCrudRepository;
+import com.acme.reservation.persistence.crud.DestinationCrudRepository;
+import com.acme.reservation.persistence.crud.ReservationCrudRepository;
 import io.r2dbc.h2.H2ConnectionConfiguration;
 import io.r2dbc.h2.H2ConnectionFactory;
 import io.r2dbc.h2.H2ConnectionOption;
@@ -64,7 +67,7 @@ public class PersistenceConfiguration extends AbstractR2dbcConfiguration {
 
   @Bean
   public SearchReservationRepository searchReservationRepository(
-      ReservationCrudRepository reservationCrudRepository, ReservationAdapter reservationAdapter) {
-    return new SearchReservationRepositoryImpl(reservationCrudRepository, reservationAdapter);
+      DatabaseClient databaseClient, ReservationAdapter reservationAdapter) {
+    return new SearchReservationRepositoryImpl(databaseClient, reservationAdapter);
   }
 }
