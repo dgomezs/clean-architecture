@@ -1,5 +1,6 @@
 package com.acme.reservation.cancellation;
 
+import com.acme.reservation.ReservationTestConfig;
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 import io.cucumber.spring.CucumberContextConfiguration;

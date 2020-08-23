@@ -1,4 +1,4 @@
-package com.acme.reservation.cancellation.helpers;
+package com.acme.reservation.helpers;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -8,10 +8,10 @@ import static org.mockito.Mockito.times;
 import com.acme.reservation.application.event.ReservationEventPublisher;
 import com.acme.reservation.application.repository.ReservationRepository;
 import com.acme.reservation.application.response.RefundBreakdown;
-import com.acme.reservation.cancellation.helpers.matchers.ReservationWasCancelledMatcher;
-import com.acme.reservation.cancellation.helpers.matchers.ReservationWasCancelledMatcherEvent;
 import com.acme.reservation.entity.Reservation;
 import com.acme.reservation.gateway.FinanceGateway;
+import com.acme.reservation.helpers.matchers.ReservationWasCancelledMatcher;
+import com.acme.reservation.helpers.matchers.ReservationWasCancelledMatcherEvent;
 import lombok.AllArgsConstructor;
 import org.junit.Assert;
 import org.mockito.Mockito;

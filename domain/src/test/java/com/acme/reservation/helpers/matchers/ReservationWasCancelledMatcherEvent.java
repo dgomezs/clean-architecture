@@ -1,4 +1,4 @@
-package com.acme.reservation.cancellation.helpers.matchers;
+package com.acme.reservation.helpers.matchers;
 
 import com.acme.reservation.application.event.ReservationCancelled;
 import com.acme.reservation.application.event.ReservationEvent;

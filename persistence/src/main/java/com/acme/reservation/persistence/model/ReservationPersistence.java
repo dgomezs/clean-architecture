@@ -3,7 +3,6 @@ package com.acme.reservation.persistence.model;
 import com.acme.reservation.entity.ReservationStatus;
 import com.acme.reservation.entity.cancellation.policy.CancellationPolicy;
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -30,7 +29,9 @@ public class ReservationPersistence implements Persistable<String> {
 
   private ReservationStatus status;
 
-  private Instant cancellationTimestamp;
+  private LocalDateTime cancellationTimestamp;
+  private LocalDateTime creationTimestamp;
+
   @Transient private boolean newReservation;
 
   @Override

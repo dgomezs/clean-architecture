@@ -11,6 +11,7 @@ import com.acme.reservation.entity.ReservationStatus;
 import com.acme.reservation.entity.cancellation.policy.CancellationPolicy;
 import com.acme.reservation.persistence.model.CustomerPersistence;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -63,6 +64,7 @@ public class TestHelper {
             .startDate(LocalDateTime.now())
             .endDate(LocalDateTime.now().plusDays(5))
             .price(new Money(BigDecimal.valueOf(100)))
+            .creationTimestamp(Instant.now())
             .build();
     return new Reservation(dto);
   }
@@ -78,6 +80,7 @@ public class TestHelper {
             .startDate(LocalDateTime.now().minusDays(30))
             .endDate(LocalDateTime.now().minusDays(25))
             .price(new Money(BigDecimal.valueOf(100)))
+            .creationTimestamp(Instant.now())
             .build();
     return new Reservation(dto);
   }

@@ -1,4 +1,4 @@
-package com.acme.reservation.cancellation.helpers;
+package com.acme.reservation.helpers;
 
 import org.springframework.transaction.ReactiveTransaction;
 

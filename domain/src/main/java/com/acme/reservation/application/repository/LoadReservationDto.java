@@ -19,11 +19,11 @@ public class LoadReservationDto {
   private final Destination destination;
   private final LocalDateTime startDate;
   private final LocalDateTime endDate;
-
   private final ReservationStatus status;
   private final RefundBreakdown currentRefund;
   private final Money price;
   private final CancellationPolicy cancellationPolicy;
   private final Instant cancellationTimestamp;
+  private final Instant creationTimestamp;
   private final Customer customer;
 }

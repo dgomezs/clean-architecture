@@ -1,12 +1,12 @@
 package com.acme.reservation.cancellation.acme_team;
 
+import com.acme.reservation.ReservationTestConfig;
 import com.acme.reservation.application.response.RefundBreakdown;
 import com.acme.reservation.application.usecases.cancellation.acme_team.CancelReservationAsAcmeTeamUseCase;
-import com.acme.reservation.cancellation.ReservationTestConfig;
-import com.acme.reservation.cancellation.helpers.MockTransaction;
-import com.acme.reservation.cancellation.helpers.ReservationMockData;
-import com.acme.reservation.cancellation.helpers.ReservationVerificationRules;
 import com.acme.reservation.entity.Reservation;
+import com.acme.reservation.helpers.MockTransaction;
+import com.acme.reservation.helpers.ReservationMockData;
+import com.acme.reservation.helpers.ReservationVerificationRules;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -27,6 +27,10 @@ public class Reservation extends SelfValidating<Reservation> {
   @Getter
   private final LocalDateTime endDate;
 
+  @NotNull(message = "the reservation needs to have a creation date")
+  @Getter
+  private final Instant creationTimestamp;
+
   @NotNull(message = "the reservation needs to have a price")
   @Getter
   private final Money price;
@@ -54,6 +58,7 @@ public class Reservation extends SelfValidating<Reservation> {
     this.endDate = dto.getEndDate();
     this.customer = dto.getCustomer();
     this.destination = dto.getDestination();
+    this.creationTimestamp = Instant.now();
     this.validateSelf();
   }
 
@@ -67,6 +72,7 @@ public class Reservation extends SelfValidating<Reservation> {
     this.endDate = dto.getEndDate();
     this.customer = dto.getCustomer();
     this.destination = dto.getDestination();
+    this.creationTimestamp = dto.getCreationTimestamp();
     this.validateSelf();
     this.validateStatus();
   }

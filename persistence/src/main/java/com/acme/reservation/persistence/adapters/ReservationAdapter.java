@@ -12,7 +12,10 @@ import com.acme.reservation.entity.ReservationId;
 import com.acme.reservation.persistence.model.ReservationPersistence;
 import com.acme.reservation.persistence.model.ReservationRow;
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Optional;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -45,6 +48,18 @@ public interface ReservationAdapter {
 
   default ReservationId toReservationId(String reservationId) {
     return new ReservationId(reservationId);
+  }
+
+  default LocalDateTime toLocalDateTime(Optional<Instant> value) {
+    return value.map(this::toLocalDateTime).orElse(null);
+  }
+
+  default Instant toInstant(LocalDateTime value) {
+    return Optional.ofNullable(value).map(t -> t.toInstant(ZoneOffset.UTC)).orElse(null);
+  }
+
+  default LocalDateTime toLocalDateTime(Instant value) {
+    return LocalDateTime.ofInstant(value, ZoneId.of("UTC"));
   }
 
   default Money toMoney(BigDecimal value) {

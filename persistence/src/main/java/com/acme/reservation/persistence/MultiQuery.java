@@ -34,5 +34,4 @@ public class MultiQuery {
   public void addParamMapping(String param, Object value) {
     this.params.put(param, value);
   }
-
 }

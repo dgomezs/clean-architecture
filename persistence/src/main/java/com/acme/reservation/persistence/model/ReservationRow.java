@@ -21,6 +21,9 @@ public class ReservationRow {
   private LocalDateTime endDate;
   private ReservationStatus status;
   private BigDecimal price;
+  // TODO replace this with instant once supported by the codecs
+  private LocalDateTime creationTimestamp;
+  private LocalDateTime cancellationTimestamp;
 
   @Column("name")
   private String reservationName;
