@@ -34,7 +34,7 @@ public class CancellationErrorsCasesTest {
   @Test
   public void ensureTransactionIsRollbackIfFinanceGatewayFailsButPersistenceSucceeds() {
     MockTransaction mockTransaction = new MockTransaction();
-    Reservation reservation = reservationMockData.getFlexReservation();
+    Reservation reservation = reservationMockData.getExistingFlexReservation();
     reservationMockData.configureTransaction(mockTransaction);
     reservationMockData.simulateFinanceGatewayFails(reservation);
     reservationMockData.updateStatusSucceeds(reservation);
@@ -44,7 +44,7 @@ public class CancellationErrorsCasesTest {
   @Test
   public void ensureTransactionIsRollbackIfFinanceGatewaySucceedsButPersistenceFails() {
     MockTransaction mockTransaction = new MockTransaction();
-    Reservation reservation = reservationMockData.getFlexReservation();
+    Reservation reservation = reservationMockData.getExistingFlexReservation();
     reservationMockData.configureTransaction(mockTransaction);
     reservationMockData.simulateFinanceGatewaySucceeds(reservation);
     reservationMockData.simulateUpdateStatusFails(reservation);

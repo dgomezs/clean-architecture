@@ -1,6 +1,6 @@
 package com.acme.reservation.application.usecases.cancellation;
 
-import com.acme.reservation.application.event.ReservationCancelled;
+import com.acme.reservation.application.event.ReservationCancelledEvent;
 import com.acme.reservation.application.event.ReservationEventPublisher;
 import com.acme.reservation.application.exception.ReservationNotFoundException;
 import com.acme.reservation.application.repository.ReservationRepository;
@@ -59,7 +59,7 @@ public abstract class CancellationFlow {
   }
 
   private void notifyReservationCancelled(Reservation reservation) {
-    eventBus.publish(new ReservationCancelled(reservation));
+    eventBus.publish(new ReservationCancelledEvent(reservation));
   }
 
   private Mono<RefundBreakdown> throwReservationNotFound(ReservationId reservationId) {

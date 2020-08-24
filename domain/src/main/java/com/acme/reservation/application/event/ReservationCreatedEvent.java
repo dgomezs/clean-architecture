@@ -6,8 +6,8 @@ import lombok.Value;
 
 @EqualsAndHashCode(callSuper = true)
 @Value
-public class ReservationCancelled extends ReservationEvent {
-  public ReservationCancelled(Reservation reservation) {
+public class ReservationCreatedEvent extends ReservationEvent {
+  public ReservationCreatedEvent(Reservation reservation) {
     super(reservation);
   }
 }

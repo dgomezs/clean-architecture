@@ -1,6 +1,6 @@
 package com.acme.reservation.application.usecases.customer_reservation;
 
-import com.acme.reservation.application.event.ReservationCreated;
+import com.acme.reservation.application.event.ReservationCreatedEvent;
 import com.acme.reservation.application.event.ReservationEventPublisher;
 import com.acme.reservation.application.repository.ReservationRepository;
 import com.acme.reservation.application.request.CreateReservationDto;
@@ -21,6 +21,6 @@ public class CreateReservationUseCaseImpl implements CreateReservationUseCase {
     return reservationRepository
         .createReservation(reservation)
         .flatMap(this.reservationRepository::getReservationById)
-        .doOnSuccess(r -> eventBus.publish(new ReservationCreated(r)));
+        .doOnSuccess(r -> eventBus.publish(new ReservationCreatedEvent(r)));
   }
 }

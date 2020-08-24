@@ -33,7 +33,7 @@ public class CancellationSuccessfulCasesTest {
   @Test
   public void ensureReservationIsCancelled() {
     MockTransaction mockTransaction = new MockTransaction();
-    Reservation reservation = reservationMockData.getFlexReservation();
+    Reservation reservation = reservationMockData.getExistingFlexReservation();
     reservationMockData.configureTransaction(mockTransaction);
     reservationMockData.simulateFinanceGatewaySucceeds(reservation);
     reservationMockData.updateStatusSucceeds(reservation);

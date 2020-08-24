@@ -34,12 +34,6 @@ public class ReservationMockData {
   private final ReservationEventPublisher eventPublisher;
   private final Clock clock;
 
-  public Reservation getFlexReservation() {
-    Reservation reservation = createRandomFlexReservation();
-    mockGetReservation(reservation);
-    return reservation;
-  }
-
   public void mockGetReservation(Reservation reservation) {
     Mockito.when(this.reservationRepository.getReservationById(reservation.getReservationId()))
         .thenReturn(Mono.just(reservation));
@@ -61,16 +55,25 @@ public class ReservationMockData {
     return Mono.empty();
   }
 
-  private Reservation createRandomFlexReservation() {
-    CreateReservationDto createReservationDto =
-        CreateReservationDto.builder()
-            .price(new Money(BigDecimal.valueOf(100)))
-            .cancellationPolicy(CancellationPolicy.FLEX)
-            .customer(getRandomCustomer())
-            .startDate(LocalDateTime.now())
-            .endDate(LocalDateTime.now().plusDays(5))
-            .destination(getRandomDestination())
-            .build();
+  public Reservation getExistingFlexReservation() {
+    CreateReservationDto createReservationDto = buildFlexReservationDto();
+    Reservation reservation = createReservationFromDto(createReservationDto);
+    mockGetReservation(reservation);
+    return reservation;
+  }
+
+  public CreateReservationDto buildFlexReservationDto() {
+    return CreateReservationDto.builder()
+        .price(new Money(BigDecimal.valueOf(100)))
+        .cancellationPolicy(CancellationPolicy.FLEX)
+        .customer(getRandomCustomer())
+        .startDate(LocalDateTime.now())
+        .endDate(LocalDateTime.now().plusDays(5))
+        .destination(getRandomDestination())
+        .build();
+  }
+
+  public Reservation createReservationFromDto(CreateReservationDto createReservationDto) {
     Reservation reservation = new Reservation(createReservationDto);
     reservation.setReservationId(randomReservationId());
     return reservation;
@@ -104,6 +107,16 @@ public class ReservationMockData {
   public void simulateUpdateStatusFails(Reservation reservation) {
     Mockito.when(this.reservationRepository.updateStatus(reservation))
         .thenReturn(Mono.error(new IllegalAccessError()));
+  }
+
+  public void simulateCreateReservationFails() {
+    Mockito.when(this.reservationRepository.createReservation(any()))
+        .thenReturn(Mono.error(new IllegalStateException()));
+  }
+
+  public void simulateCreationSuccess(Reservation reservation) {
+    Mockito.when(this.reservationRepository.createReservation(any()))
+        .thenReturn(Mono.just(reservation.getReservationId()));
   }
 
   public void updateStatusSucceeds(Reservation reservation) {

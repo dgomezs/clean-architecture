@@ -12,6 +12,8 @@ import com.acme.reservation.entity.Reservation;
 import com.acme.reservation.gateway.FinanceGateway;
 import com.acme.reservation.helpers.matchers.ReservationWasCancelledMatcher;
 import com.acme.reservation.helpers.matchers.ReservationWasCancelledMatcherEvent;
+import com.acme.reservation.helpers.matchers.ReservationWasCreatedMatcher;
+import com.acme.reservation.helpers.matchers.ReservationWasCreatedMatcherEvent;
 import lombok.AllArgsConstructor;
 import org.junit.Assert;
 import org.mockito.Mockito;
@@ -47,6 +49,11 @@ public class ReservationVerificationRules {
         .publish(argThat(new ReservationWasCancelledMatcherEvent(reservation)));
   }
 
+  public void verifyCreationEventWasPublished(Reservation reservation) {
+    Mockito.verify(this.eventPublisher, times(1))
+        .publish(argThat(new ReservationWasCreatedMatcherEvent(reservation)));
+  }
+
   public void verifyReservationWasRefunded(
       RefundBreakdown refundBreakdown, Reservation reservation) {
     if (refundBreakdown.isThereMoneyToRefundToCustomer()) {
@@ -65,5 +72,10 @@ public class ReservationVerificationRules {
     Assert.assertEquals(
         refundBreakdown.getAmountToRefund(), reservation.getTotalRefundableMoneyToCustomer());
     Mockito.verify(this.financeGateway, times(1)).refundReservation(refundBreakdown, reservation);
+  }
+
+  public void verifyReservationWasCreated(Reservation reservation) {
+    Mockito.verify(this.reservationRepository, times(1))
+        .createReservation(argThat(new ReservationWasCreatedMatcher(reservation)));
   }
 }
