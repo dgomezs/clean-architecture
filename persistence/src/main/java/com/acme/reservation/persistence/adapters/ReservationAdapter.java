@@ -20,6 +20,7 @@ import java.util.Optional;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.springframework.util.StringUtils;
 
 @Mapper(componentModel = "spring")
 public interface ReservationAdapter {
@@ -47,7 +48,7 @@ public interface ReservationAdapter {
   }
 
   default ReservationId toReservationId(String reservationId) {
-    return new ReservationId(reservationId);
+    return StringUtils.isEmpty(reservationId) ? null : new ReservationId(reservationId);
   }
 
   default LocalDateTime toLocalDateTime(Optional<Instant> value) {

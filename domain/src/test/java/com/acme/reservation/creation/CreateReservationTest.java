@@ -2,7 +2,7 @@ package com.acme.reservation.creation;
 
 import com.acme.reservation.ReservationTestConfig;
 import com.acme.reservation.application.request.CreateReservationDto;
-import com.acme.reservation.application.usecases.customer_reservation.CreateReservationUseCase;
+import com.acme.reservation.application.usecases.creation.CreateReservationUseCase;
 import com.acme.reservation.entity.Reservation;
 import com.acme.reservation.helpers.ReservationMockData;
 import com.acme.reservation.helpers.ReservationVerificationRules;

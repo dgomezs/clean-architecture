@@ -30,10 +30,11 @@ public class ReservationRepositoryImpl implements ReservationRepository {
   private final DatabaseClient databaseClient;
 
   public Mono<ReservationId> createReservation(Reservation reservation) {
+
+    reservation.setReservationId(new ReservationId(UUID.randomUUID().toString()));
+
     ReservationPersistence reservationPersistence =
         reservationAdapter.toReservationPersistence(reservation);
-
-    reservationPersistence.setReservationId(UUID.randomUUID().toString());
     reservationPersistence.setNewReservation(true);
 
     Mono<CustomerPersistence> customerPersistenceMono = storeCustomer(reservation);
