@@ -11,6 +11,7 @@
     <module>domain</module>
     <module>persistence</module>
     <module>email</module>
+    <module>rest</module>
   </modules>
 
   <packaging>pom</packaging>
