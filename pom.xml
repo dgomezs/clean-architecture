@@ -10,6 +10,7 @@
   <modules>
     <module>domain</module>
     <module>persistence</module>
+    <module>email</module>
   </modules>
 
   <packaging>pom</packaging>

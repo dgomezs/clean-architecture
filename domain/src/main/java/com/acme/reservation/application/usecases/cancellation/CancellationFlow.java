@@ -40,7 +40,7 @@ public abstract class CancellationFlow {
 
               return executeInTransaction(saveThenRefund)
                   .thenReturn(refundBreakdown)
-                  .doOnNext(r -> this.notifyReservationCancelled(reservation));
+                  .doOnNext(r -> this.notifyReservationCancelled(reservation, refundBreakdown));
             })
         .switchIfEmpty(throwReservationNotFound(reservationId));
   }
@@ -58,8 +58,9 @@ public abstract class CancellationFlow {
     return toBeExecutedInTransaction.as(transactionalOperator::transactional);
   }
 
-  private void notifyReservationCancelled(Reservation reservation) {
-    eventBus.publish(new ReservationCancelledEvent(reservation));
+  private void notifyReservationCancelled(
+      Reservation reservation, RefundBreakdown refundBreakdown) {
+    eventBus.publish(new ReservationCancelledEvent(reservation, refundBreakdown));
   }
 
   private Mono<RefundBreakdown> throwReservationNotFound(ReservationId reservationId) {
