@@ -24,6 +24,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
   private final ReservationCrudRepository reservationCrudRepository;
   private final CustomerCrudRepository customerCrudRepository;
   private final DestinationCrudRepository destinationCrudRepository;
+  private final RefundRepository refundRepository;
   private final ReservationAdapter reservationAdapter;
   private final CustomerAdapter customerAdapter;
   private final DestinationAdapter destinationAdapter;
@@ -83,6 +84,16 @@ public class ReservationRepositoryImpl implements ReservationRepository {
   }
 
   public Mono<Void> updateStatus(Reservation reservation) {
-    return null;
+    ReservationPersistence reservationPersistence =
+        reservationAdapter.toReservationPersistence(reservation);
+    reservationPersistence.setNewReservation(false);
+
+    Mono<Void> refundOperation =
+        reservation
+            .getCurrentRefund()
+            .map(r -> this.refundRepository.storeCurrentRefund(reservation))
+            .orElse(Mono.empty());
+
+    return reservationCrudRepository.save(reservationPersistence).and(refundOperation).then();
   }
 }

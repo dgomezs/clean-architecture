@@ -37,11 +37,12 @@ public interface ReservationAdapter {
   @Mapping(target = "destination", source = ".")
   LoadReservationDto toReservation(ReservationRow reservationRow);
 
+  @Mapping(target = "name", source = "reservationName")
+  @Mapping(target = "id", source = "destinationId")
+  Destination toDestination(ReservationRow reservationRow);
+
   @Mapping(target = "id", source = "customerId")
   Customer toCustomer(ReservationRow reservationRow);
-
-  @Mapping(target = "name", source = "reservationName")
-  Destination toDestination(ReservationRow reservationRow);
 
   default ZoneId toZoneId(String timeZone) {
     return ZoneId.of(timeZone);
@@ -84,8 +85,10 @@ public interface ReservationAdapter {
     return optional.orElse(null);
   }
 
+  @Mapping(target = "destination", source = ".")
   ReservationListingCustomer toReservationListingCustomer(ReservationRow reservationRow);
 
   @Mapping(target = "reservationListingCustomer", source = ".")
+  @Mapping(target = "customer", source = ".")
   ReservationListingAcmeTeam toReservationListingAcmeTeam(ReservationRow reservationRow);
 }

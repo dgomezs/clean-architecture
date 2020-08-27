@@ -13,10 +13,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class RestReservationListingAcmeTeam {
+
+  private String reservationId;
+
   @JsonFormat(pattern = FormatConstants.DATE_TIME_FORMAT)
   private LocalDateTime startDate;
 
   private RestDestination destination;
+  private RestCustomer customer;
 
   @JsonFormat(pattern = FormatConstants.DATE_TIME_FORMAT)
   private LocalDateTime endDate;

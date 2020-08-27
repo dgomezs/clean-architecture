@@ -2,8 +2,11 @@ package com.acme.reservation.rest.adapter;
 
 import com.acme.reservation.application.response.ReservationListingAcmeTeam;
 import com.acme.reservation.application.response.ReservationListingCustomer;
+import com.acme.reservation.entity.Customer;
 import com.acme.reservation.entity.Destination;
+import com.acme.reservation.entity.Email;
 import com.acme.reservation.entity.Money;
+import com.acme.reservation.rest.response.RestCustomer;
 import com.acme.reservation.rest.response.RestDestination;
 import com.acme.reservation.rest.response.RestReservationListingAcmeTeam;
 import com.acme.reservation.rest.response.RestReservationListingCustomer;
@@ -38,6 +41,12 @@ public interface RestReservationAdapter {
   }
 
   RestDestination toDestination(Destination destination);
+
+  RestCustomer toCustomer(Customer customer);
+
+  default String fromEmail(Email email) {
+    return email.getEmail();
+  }
 
   default BigDecimal toPrice(Money money) {
     return money.getPrice();

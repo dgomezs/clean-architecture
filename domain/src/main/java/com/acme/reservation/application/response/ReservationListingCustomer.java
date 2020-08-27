@@ -14,6 +14,8 @@ import lombok.Getter;
 @Getter
 public class ReservationListingCustomer {
 
+  private final String reservationId;
+
   private final LocalDateTime startDate;
 
   private final Destination destination;
@@ -26,7 +28,7 @@ public class ReservationListingCustomer {
 
   private final ReservationStatus status;
 
-  private Instant cancellationTimestamp;
+  private final Instant cancellationTimestamp;
 
   public Optional<Instant> getCancellationTimestamp() {
     return Optional.ofNullable(cancellationTimestamp);

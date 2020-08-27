@@ -28,5 +28,6 @@ public class ReservationRow {
   @Column("name")
   private String reservationName;
 
+  private Long destinationId;
   private String timeZone;
 }

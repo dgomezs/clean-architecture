@@ -5,3 +5,8 @@ price DECIMAL, cancellation_policy VARCHAR(50), customer_id BIGINT, destination_
  cancellation_timestamp  TIMESTAMP
  NULL, creation_timestamp  TIMESTAMP
  , status VARCHAR (50));
+CREATE TABLE refund (id SERIAL PRIMARY KEY, reservation_id VARCHAR (255), refund_amount DECIMAL,  creation_timestamp  TIMESTAMP );
+
+ ALTER TABLE refund
+    ADD FOREIGN KEY (reservation_id)
+    REFERENCES reservation(reservation_id);

@@ -4,9 +4,11 @@ import com.acme.reservation.application.repository.ReservationRepository;
 import com.acme.reservation.application.repository.SearchReservationRepository;
 import com.acme.reservation.persistence.adapters.CustomerAdapter;
 import com.acme.reservation.persistence.adapters.DestinationAdapter;
+import com.acme.reservation.persistence.adapters.RefundAdapter;
 import com.acme.reservation.persistence.adapters.ReservationAdapter;
 import com.acme.reservation.persistence.crud.CustomerCrudRepository;
 import com.acme.reservation.persistence.crud.DestinationCrudRepository;
+import com.acme.reservation.persistence.crud.RefundCrudRepository;
 import com.acme.reservation.persistence.crud.ReservationCrudRepository;
 import io.r2dbc.h2.H2ConnectionConfiguration;
 import io.r2dbc.h2.H2ConnectionFactory;
@@ -47,10 +49,17 @@ public class PersistenceConfiguration extends AbstractR2dbcConfiguration {
   }
 
   @Bean
+  RefundRepository refundRepository(
+      RefundCrudRepository refundCrudRepository, RefundAdapter refundAdapter) {
+    return new RefundRepositoryImpl(refundCrudRepository, refundAdapter);
+  }
+
+  @Bean
   public ReservationRepository reservationRepository(
       ReservationCrudRepository reservationCrudRepository,
       CustomerCrudRepository customerCrudRepository,
       DestinationCrudRepository destinationCrudRepository,
+      RefundRepository refundRepository,
       ReservationAdapter reservationAdapter,
       CustomerAdapter customerAdapter,
       DestinationAdapter destinationAdapter,
@@ -59,6 +68,7 @@ public class PersistenceConfiguration extends AbstractR2dbcConfiguration {
         reservationCrudRepository,
         customerCrudRepository,
         destinationCrudRepository,
+        refundRepository,
         reservationAdapter,
         customerAdapter,
         destinationAdapter,
