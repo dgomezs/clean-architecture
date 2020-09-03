@@ -6,7 +6,9 @@ import com.acme.reservation.application.usecases.search.customer.SearchReservati
 import com.acme.reservation.rest.adapter.RestReservationAdapter;
 import com.acme.reservation.rest.response.RestReservationListingAcmeTeam;
 import com.acme.reservation.rest.response.RestReservationListingCustomer;
+import java.time.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +33,24 @@ public class SearchReservationsController {
     this.restReservationAdapter = restReservationAdapter;
   }
 
+  @GetMapping(value = "/search/stream")
+  public Flux<ServerSentEvent<RestReservationListingAcmeTeam>> searchReservationStream(
+      SearchReservationFilter searchReservationFilter) {
+    // TODO add security
+    return searchReservationAcmeTeamUseCase
+        .searchReservations(searchReservationFilter)
+        .delayElements(Duration.ofSeconds(3))
+        .take(3)
+        .map(this.restReservationAdapter::toReservationListingAcmeTeam)
+        .map(
+            v ->
+                ServerSentEvent.<RestReservationListingAcmeTeam>builder()
+                    .id(v.getReservationId())
+                    .data(v)
+                    .event("reservation-event")
+                    .build());
+  }
+
   @GetMapping(value = "/customer/{customerId:[\\d]+}")
   public Flux<RestReservationListingCustomer> getReservationsByCustomer(
       @PathVariable Long customerId) {
@@ -41,7 +61,7 @@ public class SearchReservationsController {
   }
 
   @GetMapping(value = "/search")
-  public Flux<RestReservationListingAcmeTeam> getReservationsByCustomer(
+  public Flux<RestReservationListingAcmeTeam> getReservationsByAcmeTeam(
       SearchReservationFilter searchReservationFilter) {
     // TODO add security
     return searchReservationAcmeTeamUseCase
